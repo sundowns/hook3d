@@ -19,7 +19,7 @@ public class GridWorld
         {
             for (int y = 0; y < grid_array.GetLength(1); y++)
             {
-                grid_array[x][y] = 0;
+                grid_array[x, y] = 0;
             }
         }
     }

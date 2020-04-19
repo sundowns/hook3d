@@ -8,7 +8,7 @@ public class GridManager : MonoBehaviour
 {
     private GridWorld grid;
 
-    [MinLength(1)]
+    [Range(1, 1000)]
     public int cell_width;
 
     // Start is called before the first frame update
@@ -20,24 +20,35 @@ public class GridManager : MonoBehaviour
     void GenerateWorld()
     {
         this.grid = new GridWorld(8, 8);
-
-        var mesh = ConstructWorldMesh();
-        GetComponent<MeshFilter>().mesh = mesh;
-
+        this.ConstructWorldMesh(this.grid);
     }
 
-    Mesh ConstructWorldMesh(GridWorld world)
+    void ConstructWorldMesh(GridWorld world)
     {
         // create a mesh from our grid
         var mesh = new Mesh();
-        var vertices = new Vector3[];
-        for (int x = 0; x < world.grid_array.GetLength(0); x++)
-        {
-            for (int y = 0; y < world.grid_array.GetLength(1); y++)
-            {
-                // TODO: need to create a mesh from our 2D grid array :thinking:
-            }
-        }
+        var vertices = new Vector3[] {
+            new Vector3(0, 0, 0),
+            new Vector3(world.width * cell_width, 0, 0),
+            new Vector3(world.width * cell_width, world.height * cell_width, 0),
+            new Vector3(0, world.height * cell_width, 0)
+        };
+        mesh.vertices = vertices;
+        mesh.uv = new Vector2[] {
+            new Vector2(0,0),
+            new Vector2(0,1),
+            new Vector2(1,1),
+            new Vector2(1,0)
+        };
+        mesh.triangles = new int[] {
+            0,1,2,0,2,3
+        };
+
+        GetComponent<MeshFilter>().mesh = mesh;
+        mesh.RecalculateBounds();
+        mesh.RecalculateNormals();
+
+        Debug.Log("wtf??");
     }
 
 }
