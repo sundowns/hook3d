@@ -156,7 +156,7 @@ MonoBehaviour:
   cell_width: 10
   columns: 4
   rows: 4
-  player_prefab: {fileID: 8379591852172530397, guid: d003efc747ddc7a4997802dba4006891,
+  block_prefab: {fileID: 1128236889355688235, guid: f5159ac69e7f7f7488e89c14a6d1deca,
     type: 3}
 --- !u!4 &627197773
 Transform:

@@ -15,7 +15,7 @@ public class WorldGenerator : MonoBehaviour
     public int rows = 4;
 
     // Prefabs
-    public GameObject player_prefab;
+    public GameObject block_prefab;
 
     // Generated
     private GridWorld grid;
@@ -39,9 +39,7 @@ public class WorldGenerator : MonoBehaviour
             mesh.RecalculateBounds();
             mesh.RecalculateNormals();
 
-            // Translate our world so the centre matches the mesh's centre
             this.grid_origin = new Vector3(-grid.width / 2 * cell_width, 0, -grid.height / 2 * cell_width);
-            // transform.position = grid_origin;
         }
         else
         {
@@ -50,11 +48,11 @@ public class WorldGenerator : MonoBehaviour
     }
 
     // Spawn player at a grid position
-    void SpawnPlayer(Vector2 position)
+    void SpawnBlock(Vector2 position)
     {
         var world_position = grid.GetWorldPosition(position);
-        var player = Instantiate(player_prefab, new Vector3(world_position.x, 10, world_position.y), Quaternion.identity);
-        player.transform.parent = transform;
+        var block = Instantiate(block_prefab, new Vector3(world_position.x, 10, world_position.y), Quaternion.identity);
+        block.transform.parent = transform;
     }
 
     // Start is called before the first frame update
@@ -63,12 +61,12 @@ public class WorldGenerator : MonoBehaviour
         GenerateWorld();
         UpdateMesh();
 
+        // SpawnPlayer(new Vector2(2, 2));
         for (int x = 0; x < columns; x++)
         {
             for (int y = 0; y < rows; y++)
             {
-                SpawnPlayer(new Vector2(x, y));
-
+                SpawnBlock(new Vector2(x, y));
             }
         }
     }
