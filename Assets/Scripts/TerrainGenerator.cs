@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class MeshGenerator
+public static class TerrainGenerator
 {
-    public static Mesh ConstructWorldMesh(GridWorld world, int cell_width)
+    public static GameObject ConstructTerrain(GridWorld world, int cell_width, Material material)
     {
         // create a mesh from our grid
         var mesh = new Mesh();
@@ -25,10 +25,19 @@ public static class MeshGenerator
             0,2,1,0,3,2
         };
 
+
+        // Create a gameobject here
+        GameObject terrain = new GameObject("Terrain");
+        MeshFilter filter = terrain.AddComponent(typeof(MeshFilter)) as MeshFilter;
+        filter.mesh = mesh;
+        MeshCollider collider = terrain.AddComponent(typeof(MeshCollider)) as MeshCollider;
+        collider.sharedMesh = mesh;
         mesh.RecalculateBounds();
         mesh.RecalculateNormals();
+        MeshRenderer terrain_renderer = terrain.AddComponent(typeof(MeshRenderer)) as MeshRenderer;
+        terrain_renderer.material = material;
 
-        return mesh;
+        return terrain;
     }
 
 }
