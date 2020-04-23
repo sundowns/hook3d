@@ -40,8 +40,9 @@ public class WorldGenerator : MonoBehaviour
     {
         var grid_behaviour = GetComponent<GridBehaviour>();
         var world_position = grid_behaviour.GetWorldPosition(position);
-        var entity = Instantiate(prefab, new Vector3(world_position.x, 5, world_position.y), prefab.transform.rotation);
+        var entity = Instantiate(prefab, new Vector3(0, 0, 0), prefab.transform.rotation);
         entity.transform.parent = transform;
+
 
         // Add our prefab to the grid world
         grid_behaviour.AddTo(entity, position);
@@ -52,7 +53,7 @@ public class WorldGenerator : MonoBehaviour
     {
         GenerateWorld();
 
-        SpawnPrefab(player_prefab, new Vector2(0, 1));
-        SpawnPrefab(block_prefab, new Vector2(1, 1));
+        SpawnPrefab(player_prefab, new Vector2(0, 0));
+        // SpawnPrefab(block_prefab, new Vector2(1, 1));
     }
 }

@@ -17,15 +17,14 @@ public static class DirectionExtensions
     {
         switch (direction)
         {
-            // TODO: I have no idea if these are correct yee haw
             case Direction.Down:
-                return new Vector2(0, 1);
-            case Direction.Up:
-                return new Vector2(0, -1);
-            case Direction.Left:
-                return new Vector2(-1, 0);
-            case Direction.Right:
                 return new Vector2(1, 0);
+            case Direction.Up:
+                return new Vector2(-1, 0);
+            case Direction.Left:
+                return new Vector2(0, -1);
+            case Direction.Right:
+                return new Vector2(0, 1);
             default:
                 return new Vector2(0, 0);
         }

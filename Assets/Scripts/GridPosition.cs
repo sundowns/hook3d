@@ -9,4 +9,9 @@ public class GridPosition : MonoBehaviour
     {
         position = position + delta;
     }
+
+    public void set(Vector2 position)
+    {
+        this.position = position;
+    }
 }
