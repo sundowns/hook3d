@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(GridBehaviour))]
 public class WorldGenerator : MonoBehaviour
 {
     // Parameters
@@ -15,17 +16,15 @@ public class WorldGenerator : MonoBehaviour
 
     // Prefabs
     public GameObject block_prefab;
+    public GameObject player_prefab;
 
     // Generated
-    private GridWorld grid;
-    private Vector3 grid_origin;
     private GameObject terrain;
 
     void GenerateWorld()
     {
-        Debug.Log("Generating new grid");
-        grid = new GridWorld(columns, rows, cell_width);
-        Debug.Log("Generating Mesh");
+        var grid = new GridWorld(columns, rows, cell_width);
+        GetComponent<GridBehaviour>().grid = grid;
         terrain = TerrainGenerator.ConstructTerrain(grid, cell_width, floor_material);
         UpdateTerrain();
     }
@@ -34,15 +33,18 @@ public class WorldGenerator : MonoBehaviour
     {
         // Attach our terrain as a child gameobject
         terrain.transform.parent = transform;
-        this.grid_origin = new Vector3(-grid.width / 2 * cell_width, 0, -grid.height / 2 * cell_width);
     }
 
-    // Spawn player at a grid position
-    void SpawnBlock(Vector2 position)
+    // Spawn block at a grid position
+    void SpawnPrefab(GameObject prefab, Vector2 position)
     {
-        var world_position = grid.GetWorldPosition(position);
-        var block = Instantiate(block_prefab, new Vector3(world_position.x, 10, world_position.y), block_prefab.transform.rotation);
-        block.transform.parent = transform;
+        var grid_behaviour = GetComponent<GridBehaviour>();
+        var world_position = grid_behaviour.GetWorldPosition(position);
+        var entity = Instantiate(prefab, new Vector3(world_position.x, 5, world_position.y), prefab.transform.rotation);
+        entity.transform.parent = transform;
+
+        // Add our prefab to the grid world
+        grid_behaviour.AddTo(entity, position);
     }
 
     // Start is called before the first frame update
@@ -50,13 +52,7 @@ public class WorldGenerator : MonoBehaviour
     {
         GenerateWorld();
 
-        // SpawnPlayer(new Vector2(2, 2));
-        for (int x = 0; x < columns; x++)
-        {
-            for (int y = 0; y < rows; y++)
-            {
-                SpawnBlock(new Vector2(x, y));
-            }
-        }
+        SpawnPrefab(player_prefab, new Vector2(0, 1));
+        SpawnPrefab(block_prefab, new Vector2(1, 1));
     }
 }

@@ -28,7 +28,6 @@ public class GridWorld
 
     public Vector2 GetWorldPosition(Vector2 grid_position)
     {
-        Debug.Log(cell_width);
         return new Vector2(cell_width / 2 + grid_position.x * cell_width, cell_width / 2 + grid_position.y * cell_width);
     }
 }
