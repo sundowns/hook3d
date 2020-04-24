@@ -157,7 +157,7 @@ MonoBehaviour:
   floor_material: {fileID: 2100000, guid: 629a86803e7659a4098d6b7fe0887cc4, type: 2}
   block_prefab: {fileID: 1128236889355688235, guid: f5159ac69e7f7f7488e89c14a6d1deca,
     type: 3}
-  player_prefab: {fileID: 5262930239819335690, guid: 6298ce16f472f2f4b81570c557167235,
+  player_prefab: {fileID: 3623320620434466317, guid: 6298ce16f472f2f4b81570c557167235,
     type: 3}
 --- !u!4 &627197773
 Transform:
