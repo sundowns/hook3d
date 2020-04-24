@@ -11,35 +11,55 @@ public class GridBehaviour : MonoBehaviour
         return this.grid.GetWorldPosition(grid_position);
     }
 
+    // TODO: add to occupancy grid and do occupancy checks when we have that
     public void AddTo(GameObject entity, Vector2 grid_position)
     {
-        // TODO: add to occupancy grid and do occupancy checks when we have that
         entity.AddComponent(typeof(GridPosition));
-        Move(entity, grid_position);
+        Move(entity, grid_position, false);
     }
 
+    // TODO: occupancy check
     public void AttemptMove(GameObject entity, Vector2 delta)
     {
-        Debug.Log($"Move by: {delta}");
-        var result = entity.GetComponent<GridPosition>().position + delta;
-        // TODO: occupancy check
-        // check out target cell is a valid grid coordinate
-        if (result.x >= 0 && result.x < grid.width && result.y >= 0 && result.y < grid.height)
-        {
-            // Move our entity
-            Move(entity, result);
-        }
+        var grid_locked = entity.GetComponent<GridPosition>();
+        if (!grid_locked.isMoving) {
+            var result = grid_locked.position + delta;
+            // check out target cell is a valid grid coordinate
+            if (result.x >= 0 && result.x < grid.width && result.y >= 0 && result.y < grid.height)
+            {
+                Move(entity, result);
+            }
+        } 
+        // TODO: else can we buffer the movement?
     }
 
-    private void Move(GameObject entity, Vector2 position)
+    private void Move(GameObject entity, Vector2 position, bool tween = true)
     {
         // update our grid position
         entity.GetComponent<GridPosition>()?.set(position);
         Vector3 world_pos = GetWorldPosition(position);
         // place our object on the grid plane
         world_pos.y = entity.GetComponent<MeshRenderer>().bounds.size.y / 2;
-        entity.transform.position = world_pos;
+        
+        if (tween) 
+            StartCoroutine(MoveGradually(entity, world_pos, 0.35f));
+        else 
+            entity.transform.position = world_pos;
+    }
 
-        // TODO: lets try some coroutine tweening :o
+    private IEnumerator MoveGradually(GameObject entity, Vector3 target_position, float duration) {
+        var grid_locked = entity.GetComponent<GridPosition>();
+        grid_locked.isMoving = true;
+
+        float elapsedTime = 0;
+        float ratio = elapsedTime / duration;
+        Vector3 start_position = entity.transform.position;
+        while (ratio < 1f) {
+            elapsedTime += Time.deltaTime;
+            ratio = elapsedTime / duration;
+            entity.transform.position = Vector3.Lerp(start_position, target_position, ratio);  
+            yield return null;
+        }
+        grid_locked.isMoving = false;
     }
 }
