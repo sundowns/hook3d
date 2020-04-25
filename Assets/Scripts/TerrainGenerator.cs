@@ -36,6 +36,8 @@ public static class TerrainGenerator
         mesh.RecalculateNormals();
         MeshRenderer terrain_renderer = terrain.AddComponent(typeof(MeshRenderer)) as MeshRenderer;
         terrain_renderer.material = material;
+        // Set the texture scale so it tiles across our mesh
+        terrain_renderer.material.SetTextureScale("_MainTex", new Vector2(world.width, world.height));
 
         return terrain;
     }

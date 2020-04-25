@@ -154,7 +154,7 @@ MonoBehaviour:
   cell_width: 5
   columns: 4
   rows: 4
-  floor_material: {fileID: 2100000, guid: 629a86803e7659a4098d6b7fe0887cc4, type: 2}
+  floor_material: {fileID: 2100000, guid: 9b067fc71ca18b741b14b93dd2be2bfd, type: 2}
   block_prefab: {fileID: 1128236889355688235, guid: f5159ac69e7f7f7488e89c14a6d1deca,
     type: 3}
   player_prefab: {fileID: 3623320620434466317, guid: 6298ce16f472f2f4b81570c557167235,
@@ -329,8 +329,8 @@ Camera:
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 60
-  orthographic: 0
-  orthographic size: 5
+  orthographic: 1
+  orthographic size: 20
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -354,7 +354,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 963194225}
   m_LocalRotation: {x: 0.5, y: -0.5, z: 0.5, w: 0.5}
-  m_LocalPosition: {x: 4.5610113, y: 45.432655, z: 7.5565925}
+  m_LocalPosition: {x: 8.2, y: 45.432655, z: 10.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

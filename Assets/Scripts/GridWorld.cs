@@ -28,6 +28,6 @@ public class GridWorld
 
     public Vector3 GetWorldPosition(Vector2 grid_position)
     {
-        return new Vector3(cell_width / 2 + grid_position.x * cell_width, 0, cell_width / 2 + grid_position.y * cell_width);
+        return new Vector3(cell_width / 2 + (grid_position.x * cell_width), 0, cell_width / 2 + (grid_position.y * cell_width));
     }
 }

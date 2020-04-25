@@ -22,15 +22,16 @@ public class GridBehaviour : MonoBehaviour
     public void AttemptMove(GameObject entity, Vector2 delta)
     {
         var grid_locked = entity.GetComponent<GridPosition>();
-        if (!grid_locked.isMoving) {
+        if (!grid_locked.isMoving)
+        {
             var result = grid_locked.position + delta;
             // check out target cell is a valid grid coordinate
             if (result.x >= 0 && result.x < grid.width && result.y >= 0 && result.y < grid.height)
             {
                 Move(entity, result);
             }
-        } 
-        // TODO: else can we buffer the movement?
+        }
+        // TODO: else: can we buffer the movement?
     }
 
     private void Move(GameObject entity, Vector2 position, bool tween = true)
@@ -39,25 +40,29 @@ public class GridBehaviour : MonoBehaviour
         entity.GetComponent<GridPosition>()?.set(position);
         Vector3 world_pos = GetWorldPosition(position);
         // place our object on the grid plane
-        world_pos.y = entity.GetComponent<MeshRenderer>().bounds.size.y / 2;
-        
-        if (tween) 
-            StartCoroutine(MoveGradually(entity, world_pos, 0.35f));
-        else 
-            entity.transform.position = world_pos;
+        var entity_size = entity.GetComponent<MeshRenderer>().bounds.size;
+        // world_pos.y = entity_size.y / 2;
+        var final_pos = new Vector3(world_pos.x + entity_size.x / 4, entity_size.y / 2, world_pos.z + entity_size.z / 4);
+
+        if (tween)
+            StartCoroutine(MoveGradually(entity, final_pos, 0.35f));
+        else
+            entity.transform.position = final_pos;
     }
 
-    private IEnumerator MoveGradually(GameObject entity, Vector3 target_position, float duration) {
+    private IEnumerator MoveGradually(GameObject entity, Vector3 target_position, float duration)
+    {
         var grid_locked = entity.GetComponent<GridPosition>();
         grid_locked.isMoving = true;
 
         float elapsedTime = 0;
         float ratio = elapsedTime / duration;
         Vector3 start_position = entity.transform.position;
-        while (ratio < 1f) {
+        while (ratio < 1f)
+        {
             elapsedTime += Time.deltaTime;
             ratio = elapsedTime / duration;
-            entity.transform.position = Vector3.Lerp(start_position, target_position, ratio);  
+            entity.transform.position = Vector3.Lerp(start_position, target_position, ratio);
             yield return null;
         }
         grid_locked.isMoving = false;

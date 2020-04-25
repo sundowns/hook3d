@@ -40,9 +40,7 @@ public class WorldGenerator : MonoBehaviour
     {
         var grid_behaviour = GetComponent<GridBehaviour>();
         var world_position = grid_behaviour.GetWorldPosition(position);
-        var entity = Instantiate(prefab, new Vector3(0, 0, 0), prefab.transform.rotation);
-        entity.transform.parent = transform;
-
+        var entity = Instantiate(prefab, new Vector3(0, 0, 0), prefab.transform.rotation, this.transform);
 
         // Add our prefab to the grid world
         grid_behaviour.AddTo(entity, position);
