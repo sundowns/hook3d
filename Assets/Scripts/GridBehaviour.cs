@@ -14,34 +14,47 @@ public class GridBehaviour : MonoBehaviour
     // TODO: add to occupancy grid and do occupancy checks when we have that
     public void AddTo(GameObject entity, Vector2 grid_position)
     {
-        entity.AddComponent(typeof(GridPosition));
-        Move(entity, grid_position, false);
+        if (!grid.IsOccupied(grid_position))
+        {
+            entity.AddComponent(typeof(GridPosition));
+            Move(entity, grid_position, false);
+        }
+        else
+        {
+            Debug.LogWarning($"Attempted to add entity to already occupied position: {grid_position}");
+        }
     }
 
-    // TODO: occupancy check
     public void AttemptMove(GameObject entity, Vector2 delta)
     {
         var grid_locked = entity.GetComponent<GridPosition>();
         if (!grid_locked.isMoving)
         {
-            var result = grid_locked.position + delta;
+            var target = grid_locked.position + delta;
             // check out target cell is a valid grid coordinate
-            if (result.x >= 0 && result.x < grid.width && result.y >= 0 && result.y < grid.height)
+            if (target.x >= 0 && target.x < grid.width && target.y >= 0 && target.y < grid.height && !grid.IsOccupied(target))
             {
-                Move(entity, result);
+                Move(entity, target);
             }
         }
         // TODO: else: can we buffer the movement?
     }
 
-    private void Move(GameObject entity, Vector2 position, bool tween = true)
+    // Assumes the target position is a valid move
+    private void Move(GameObject entity, Vector2 grid_position, bool tween = true)
     {
+        var grid_locked = entity.GetComponent<GridPosition>();
+        // mark the entity's old cell as empty
+        grid.RemoveOccupant(grid_locked.position);
+
         // update our grid position
-        entity.GetComponent<GridPosition>()?.set(position);
-        Vector3 world_pos = GetWorldPosition(position);
-        // place our object on the grid plane
+        grid_locked.set(grid_position);
+        Vector3 world_pos = GetWorldPosition(grid_position);
         var entity_size = entity.GetComponent<MeshRenderer>().bounds.size;
         var final_pos = new Vector3(world_pos.x, entity_size.y / 2, world_pos.z);
+
+        // occupy the new cell
+        grid.SetOccupant(entity, grid_position);
 
         if (tween)
             StartCoroutine(MoveGradually(entity, final_pos, 0.35f));

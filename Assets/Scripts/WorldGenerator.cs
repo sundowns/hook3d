@@ -52,6 +52,6 @@ public class WorldGenerator : MonoBehaviour
         GenerateWorld();
 
         SpawnPrefab(player_prefab, new Vector2(0, 0));
-        // SpawnPrefab(block_prefab, new Vector2(1, 1));
+        SpawnPrefab(block_prefab, new Vector2(1, 1));
     }
 }
