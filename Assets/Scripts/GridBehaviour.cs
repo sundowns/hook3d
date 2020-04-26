@@ -41,13 +41,12 @@ public class GridBehaviour : MonoBehaviour
         Vector3 world_pos = GetWorldPosition(position);
         // place our object on the grid plane
         var entity_size = entity.GetComponent<MeshRenderer>().bounds.size;
-        // world_pos.y = entity_size.y / 2;
-        var final_pos = new Vector3(world_pos.x + entity_size.x / 4, entity_size.y / 2, world_pos.z + entity_size.z / 4);
+        var final_pos = new Vector3(world_pos.x, entity_size.y / 2, world_pos.z);
 
         if (tween)
             StartCoroutine(MoveGradually(entity, final_pos, 0.35f));
         else
-            entity.transform.position = final_pos;
+            entity.transform.position = world_pos;
     }
 
     private IEnumerator MoveGradually(GameObject entity, Vector3 target_position, float duration)
