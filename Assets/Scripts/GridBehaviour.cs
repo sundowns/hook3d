@@ -46,7 +46,7 @@ public class GridBehaviour : MonoBehaviour
         if (tween)
             StartCoroutine(MoveGradually(entity, final_pos, 0.35f));
         else
-            entity.transform.position = world_pos;
+            entity.transform.position = final_pos;
     }
 
     private IEnumerator MoveGradually(GameObject entity, Vector3 target_position, float duration)
