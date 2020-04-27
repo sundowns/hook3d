@@ -2,6 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+enum WorldEntity
+{
+    None,
+    Player,
+    Wall
+}
+
 [RequireComponent(typeof(GridBehaviour))]
 public class WorldGenerator : MonoBehaviour
 {
@@ -21,18 +28,54 @@ public class WorldGenerator : MonoBehaviour
     // Generated
     private GameObject terrain;
 
+    // Constructs an empty world grid and matching plane
     void GenerateWorld()
     {
         var grid = new GridWorld(columns, rows, cell_width);
         GetComponent<GridBehaviour>().grid = grid;
         terrain = TerrainGenerator.ConstructTerrain(grid, cell_width, floor_material);
-        UpdateTerrain();
-    }
-
-    void UpdateTerrain()
-    {
         // Attach our terrain as a child gameobject
         terrain.transform.parent = transform;
+    }
+
+    WorldEntity[,] GenerateWorldData()
+    {
+        var world_data = new WorldEntity[columns, rows];
+
+        // Add some random walls TODO: remove
+        world_data[1, 1] = WorldEntity.Wall;
+        world_data[2, 2] = WorldEntity.Wall;
+        world_data[1, 3] = WorldEntity.Wall;
+        world_data[5, 2] = WorldEntity.Wall;
+        world_data[3, 3] = WorldEntity.Wall;
+        world_data[2, 3] = WorldEntity.Wall;
+        world_data[5, 4] = WorldEntity.Wall;
+        world_data[2, 5] = WorldEntity.Wall;
+
+        // Add our player
+        world_data[0, 0] = WorldEntity.Player;
+
+        return world_data;
+    }
+
+    void PopulateWorld(WorldEntity[,] world_data)
+    {
+        for (int x = 0; x < world_data.GetLength(0); x++)
+        {
+            for (int y = 0; y < world_data.GetLength(1); y++)
+            {
+                switch (world_data[x, y])
+                {
+                    case WorldEntity.Player:
+                        SpawnPlayer(new Vector2(x, y));
+                        break;
+                    case WorldEntity.Wall:
+                        SpawnPrefab(block_prefab, new Vector2(x, y));
+                        break;
+                }
+
+            }
+        }
     }
 
     // Spawn block at a grid position
@@ -59,12 +102,6 @@ public class WorldGenerator : MonoBehaviour
     void Start()
     {
         GenerateWorld();
-
-        SpawnPlayer(new Vector2(0, 0));
-        SpawnPrefab(block_prefab, new Vector2(1, 1));
-        SpawnPrefab(block_prefab, new Vector2(2, 1));
-        SpawnPrefab(block_prefab, new Vector2(2, 2));
+        PopulateWorld(GenerateWorldData());
     }
-
-
 }

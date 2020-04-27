@@ -6,6 +6,9 @@ public class GridBehaviour : MonoBehaviour
 {
     public GridWorld grid;
 
+    [Range(0, 5)]
+    public float move_tween_duration;
+
     public Vector3 GetWorldPosition(Vector2 grid_position)
     {
         return this.grid.GetWorldPosition(grid_position);
@@ -57,7 +60,7 @@ public class GridBehaviour : MonoBehaviour
         grid.SetOccupant(entity, grid_position);
 
         if (tween)
-            StartCoroutine(MoveGradually(entity, final_pos, 0.35f));
+            StartCoroutine(MoveGradually(entity, final_pos, move_tween_duration));
         else
             entity.transform.position = final_pos;
     }
