@@ -36,14 +36,23 @@ public class WorldGenerator : MonoBehaviour
     }
 
     // Spawn block at a grid position
-    void SpawnPrefab(GameObject prefab, Vector2 position)
+    void SpawnPrefab(GameObject prefab, Vector2 position, string name = null)
     {
         var grid_behaviour = GetComponent<GridBehaviour>();
         var world_position = grid_behaviour.GetWorldPosition(position);
         var entity = Instantiate(prefab, new Vector3(0, 0, 0), prefab.transform.rotation, this.transform);
+        if (name != null)
+        {
+            entity.name = name;
+        }
 
         // Add our prefab to the grid world
         grid_behaviour.AddTo(entity, position);
+    }
+
+    void SpawnPlayer(Vector2 position)
+    {
+        SpawnPrefab(player_prefab, position, "Player");
     }
 
     // Start is called before the first frame update
@@ -51,7 +60,11 @@ public class WorldGenerator : MonoBehaviour
     {
         GenerateWorld();
 
-        SpawnPrefab(player_prefab, new Vector2(0, 0));
+        SpawnPlayer(new Vector2(0, 0));
         SpawnPrefab(block_prefab, new Vector2(1, 1));
+        SpawnPrefab(block_prefab, new Vector2(2, 1));
+        SpawnPrefab(block_prefab, new Vector2(2, 2));
     }
+
+
 }
