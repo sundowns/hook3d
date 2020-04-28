@@ -159,6 +159,8 @@ MonoBehaviour:
     type: 3}
   player_prefab: {fileID: 3623320620434466317, guid: 6298ce16f472f2f4b81570c557167235,
     type: 3}
+  goal_prefab: {fileID: 4517400828628974214, guid: 784110adca9d1304b9f0db2f7903e204,
+    type: 3}
 --- !u!4 &627197773
 Transform:
   m_ObjectHideFlags: 0

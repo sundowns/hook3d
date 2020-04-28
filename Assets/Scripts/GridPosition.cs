@@ -6,6 +6,7 @@ public class GridPosition : MonoBehaviour
 {
     public Vector2 position;
     public bool isMoving = false;
+    public bool isOccupier = true;
 
     public void translate(Vector2 delta)
     {

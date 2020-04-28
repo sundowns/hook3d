@@ -15,11 +15,12 @@ public class GridBehaviour : MonoBehaviour
     }
 
     // TODO: add to occupancy grid and do occupancy checks when we have that
-    public void AddTo(GameObject entity, Vector2 grid_position)
+    public void AddTo(GameObject entity, Vector2 grid_position, bool isOccupier)
     {
-        if (!grid.IsOccupied(grid_position))
+        if (!isOccupier || (isOccupier && !grid.IsOccupied(grid_position)))
         {
             entity.AddComponent(typeof(GridPosition));
+            entity.GetComponent<GridPosition>().isOccupier = isOccupier;
             Move(entity, grid_position, false);
         }
         else
@@ -47,17 +48,20 @@ public class GridBehaviour : MonoBehaviour
     private void Move(GameObject entity, Vector2 grid_position, bool tween = true)
     {
         var grid_locked = entity.GetComponent<GridPosition>();
+
         // mark the entity's old cell as empty
-        grid.RemoveOccupant(grid_locked.position);
+        if (grid_locked.isOccupier)
+            grid.RemoveOccupant(grid_locked.position);
 
         // update our grid position
         grid_locked.set(grid_position);
         Vector3 world_pos = GetWorldPosition(grid_position);
-        var entity_size = entity.GetComponent<MeshRenderer>().bounds.size;
+        var entity_size = entity.GetComponent<MeshRenderer>() ? entity.GetComponent<MeshRenderer>().bounds.size : new Vector3();
         var final_pos = new Vector3(world_pos.x, entity_size.y / 2, world_pos.z);
 
         // occupy the new cell
-        grid.SetOccupant(entity, grid_position);
+        if (grid_locked.isOccupier)
+            grid.SetOccupant(entity, grid_position);
 
         if (tween)
             StartCoroutine(MoveGradually(entity, final_pos, move_tween_duration));

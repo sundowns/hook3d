@@ -6,7 +6,8 @@ enum WorldEntity
 {
     None,
     Player,
-    Wall
+    Wall,
+    Goal
 }
 
 [RequireComponent(typeof(GridBehaviour))]
@@ -24,6 +25,7 @@ public class WorldGenerator : MonoBehaviour
     // Prefabs
     public GameObject block_prefab;
     public GameObject player_prefab;
+    public GameObject goal_prefab;
 
     // Generated
     private GameObject terrain;
@@ -52,6 +54,9 @@ public class WorldGenerator : MonoBehaviour
         world_data[5, 4] = WorldEntity.Wall;
         world_data[2, 5] = WorldEntity.Wall;
 
+        // Place a goal
+        world_data[0, 1] = WorldEntity.Goal;
+
         // Add our player
         world_data[0, 0] = WorldEntity.Player;
 
@@ -69,6 +74,9 @@ public class WorldGenerator : MonoBehaviour
                     case WorldEntity.Player:
                         SpawnPlayer(new Vector2(x, y));
                         break;
+                    case WorldEntity.Goal:
+                        SpawnGoal(new Vector2(x, y));
+                        break;
                     case WorldEntity.Wall:
                         SpawnPrefab(block_prefab, new Vector2(x, y));
                         break;
@@ -79,7 +87,7 @@ public class WorldGenerator : MonoBehaviour
     }
 
     // Spawn block at a grid position
-    void SpawnPrefab(GameObject prefab, Vector2 position, string name = null)
+    void SpawnPrefab(GameObject prefab, Vector2 position, string name = null, bool isOccupier = true)
     {
         var grid_behaviour = GetComponent<GridBehaviour>();
         var world_position = grid_behaviour.GetWorldPosition(position);
@@ -90,12 +98,17 @@ public class WorldGenerator : MonoBehaviour
         }
 
         // Add our prefab to the grid world
-        grid_behaviour.AddTo(entity, position);
+        grid_behaviour.AddTo(entity, position, isOccupier);
     }
 
     void SpawnPlayer(Vector2 position)
     {
         SpawnPrefab(player_prefab, position, "Player");
+    }
+
+    void SpawnGoal(Vector2 position)
+    {
+        SpawnPrefab(goal_prefab, position, "Goal", false);
     }
 
     // Start is called before the first frame update
