@@ -10,6 +10,6 @@ public class Goal : MonoBehaviour
     /// <param name="other">The other Collider involved in this collision.</param>
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log("hello!");
+        Debug.Log("Floor Complete!");
     }
 }

@@ -55,7 +55,7 @@ public class WorldGenerator : MonoBehaviour
         world_data[2, 5] = WorldEntity.Wall;
 
         // Place a goal
-        world_data[0, 1] = WorldEntity.Goal;
+        world_data[5, 5] = WorldEntity.Goal;
 
         // Add our player
         world_data[0, 0] = WorldEntity.Player;
