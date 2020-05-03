@@ -2,20 +2,50 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PhaseManager : MonoBehaviour
+public abstract class PhaseManager
 {
-    public enum TurnPhase
+    private TurnPhase phase;
+    public PhaseManager(TurnPhase phase)
     {
-        Player,
-        Enemy,
-        Hook
-    };
+        this.phase = phase;
+    }
 
-    public TurnPhase current_phase;
+    // Return true if the phase is over
+    public abstract bool Update();
+}
 
-    // Start is called before the first frame update
-    void Start()
+public class PlayerPhaseManager : PhaseManager
+{
+    public PlayerPhaseManager() : base(TurnPhase.Player) { }
+
+    public override bool Update()
     {
-        this.current_phase = TurnPhase.Player;
+        Debug.Log($"Player phase");
+
+        return false;
+    }
+}
+
+public class EnemyPhaseManager : PhaseManager
+{
+    public EnemyPhaseManager() : base(TurnPhase.Enemy) { }
+
+    public override bool Update()
+    {
+        Debug.Log($"Enemy phase");
+
+        return false;
+    }
+}
+
+public class HookPhaseManager : PhaseManager
+{
+    public HookPhaseManager() : base(TurnPhase.Hook) { }
+
+    public override bool Update()
+    {
+        Debug.Log($"Hook phase");
+
+        return false;
     }
 }
