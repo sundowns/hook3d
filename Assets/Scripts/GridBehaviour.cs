@@ -14,7 +14,6 @@ public class GridBehaviour : MonoBehaviour
         return this.grid.GetWorldPosition(grid_position);
     }
 
-    // TODO: add to occupancy grid and do occupancy checks when we have that
     public void AddTo(GameObject entity, Vector2 grid_position, bool isOccupier)
     {
         if (!isOccupier || (isOccupier && !grid.IsOccupied(grid_position)))
@@ -27,21 +26,6 @@ public class GridBehaviour : MonoBehaviour
         {
             Debug.LogWarning($"Attempted to add entity to already occupied position: {grid_position}");
         }
-    }
-
-    public void AttemptMove(GameObject entity, Vector2 delta)
-    {
-        var grid_locked = entity.GetComponent<GridPosition>();
-        if (!grid_locked.isMoving)
-        {
-            var target = grid_locked.position + delta;
-            // check out target cell is a valid grid coordinate
-            if (target.x >= 0 && target.x < grid.width && target.y >= 0 && target.y < grid.height && !grid.IsOccupied(target))
-            {
-                Move(entity, target);
-            }
-        }
-        // TODO: else: can we buffer the movement?
     }
 
     // Assumes the target position is a valid move
@@ -86,4 +70,28 @@ public class GridBehaviour : MonoBehaviour
         }
         grid_locked.isMoving = false;
     }
+
+    public bool AttemptMove(GameObject entity, Vector2 delta)
+    {
+        var grid_locked = entity.GetComponent<GridPosition>();
+        if (!grid_locked.isMoving)
+        {
+            var target = grid_locked.position + delta;
+            // check out target cell is a valid grid coordinate
+            if (target.x >= 0 && target.x < grid.width && target.y >= 0 && target.y < grid.height && !grid.IsOccupied(target))
+            {
+                Move(entity, target);
+                return true;
+            }
+        }
+        return false;
+        // else: can we buffer the movement?
+    }
+
+    public bool AttemptFire(GameObject thrower, Vector2 direction)
+    {
+        Debug.Log($"Attempted to fire: {direction}");
+        return false;
+    }
+
 }

@@ -33,6 +33,16 @@ public static class DirectionExtensions
 
 public class PlayerController : MonoBehaviour
 {
+    private bool can_throw_hook;
+
+    private GridBehaviour grid_controller;
+
+    void Start()
+    {
+        grid_controller = GameObject.FindWithTag("World").GetComponent<GridBehaviour>();
+        can_throw_hook = true;
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -57,7 +67,16 @@ public class PlayerController : MonoBehaviour
 
         if (action != Direction.None)
         {
-            GameObject.FindWithTag("World").GetComponent<GridBehaviour>().AttemptMove(this.gameObject, action.GetDelta());
+            grid_controller.AttemptMove(this.gameObject, action.GetDelta());
+        }
+
+
+        if (this.can_throw_hook)
+        {
+            if (Input.GetButtonDown("Fire"))
+            {
+                grid_controller.AttemptFire(this.gameObject, action.GetDelta());
+            }
         }
     }
 
