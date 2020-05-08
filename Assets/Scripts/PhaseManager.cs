@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System;
 using UnityEngine;
 
 public abstract class PhaseManager
@@ -12,6 +11,16 @@ public abstract class PhaseManager
 
     // Return true if the phase is over
     public abstract bool Update();
+    public void OnPhaseStart(object sender, PhaseChangeEventArgs e)
+    {
+        if (e.phase == phase)
+            Debug.Log($"{phase} started.");
+    }
+    public void OnPhaseEnd(object sender, PhaseChangeEventArgs e)
+    {
+        if (e.phase == phase)
+            Debug.Log($"{phase} ended.");
+    }
 }
 
 public class PlayerPhaseManager : PhaseManager
@@ -20,8 +29,6 @@ public class PlayerPhaseManager : PhaseManager
 
     public override bool Update()
     {
-        Debug.Log($"Player phase");
-
         return false;
     }
 }
@@ -32,8 +39,6 @@ public class EnemyPhaseManager : PhaseManager
 
     public override bool Update()
     {
-        Debug.Log($"Enemy phase");
-
         return false;
     }
 }
@@ -44,8 +49,6 @@ public class HookPhaseManager : PhaseManager
 
     public override bool Update()
     {
-        Debug.Log($"Hook phase");
-
         return false;
     }
 }
